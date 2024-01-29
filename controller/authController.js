@@ -20,7 +20,7 @@ const createToken = (id, age, tokenSecret) => {
 	});
 };
 
-module.exports.signup = async (req, res) => {
+module.exports.signin = async (req, res) => {
 	const { email, password, phone, name } = req.body;
 
 	try {
@@ -60,7 +60,7 @@ module.exports.signup = async (req, res) => {
 			}
 		}
 	} catch (error) {
-		handleError(res, 400, "Error in signUp/creating account- " + error);
+		handleError(res, 400, "Error in signIn/creating account- " + error);
 	}
 };
 
@@ -81,7 +81,6 @@ module.exports.getUserDetailFromToken = async (req, res) => {
 					accessToken: authToken,
 				});
 				if (!user) {
-					// res.send("User logged out at authtoken not found");
 					handleError(res,404,"No user found with this token")
 				} else {
 					res.send(userView(user));
