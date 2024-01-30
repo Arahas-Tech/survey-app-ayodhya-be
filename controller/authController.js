@@ -20,7 +20,7 @@ const createToken = (id, age, tokenSecret) => {
 	});
 };
 
-module.exports.signin = async (req, res) => {
+module.exports.signup = async (req, res) => {
 	const { email, password, phone, name } = req.body;
 
 	try {
