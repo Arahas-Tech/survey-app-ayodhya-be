@@ -10,55 +10,49 @@ const touristFeedback = new mongoose.Schema(
 		cleanliness: {
 			type: Number,
 			min: 1,
-			max: 10,
+			max: 5,
             required: true,
 		},
 		accessToTp: {
 			type: Number,
 			min: 1,
-			max: 10,
+			max: 5,
             required: true,
 		},
 		costEffectiveTp: {
 			type: Number,
 			min: 1,
-			max: 10,
+			max: 5,
             required: true,
 		},
 		lodging: {
 			type: Number,
 			min: 1,
-			max: 10,
+			max: 5,
             required: true,
 		},
 		hygiene: {
 			type: Number,
 			min: 1,
-			max: 10,
+			max: 5,
             required: true,
 		},
 		disabilityFriendly: {
 			type: Number,
 			min: 1,
-			max: 10,
+			max: 5,
             required: true,
 		},
 		// totalScore: {
 		// 	type: Number,
 		// 	min: 1,
-		// 	max: 10,
+		// 	max: 5,
 		// },
 	},
 	{
 		versionKey: false,
 	}
 );
-
-// userLogin.pre('save', async function (next) {
-//     const salt = await bcrypt.genSalt();
-//     this.password = await bcrypt.hash(this.password,salt);
-//     next();
-// });
 
 const userFeedbackModel = new mongoose.model('touristFeedback', touristFeedback)
 

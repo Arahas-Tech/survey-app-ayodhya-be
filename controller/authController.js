@@ -9,7 +9,7 @@ const userView = require("../utils/userView");
 const verifyToken = require("../utils/verifyToken");
 // const generateOTP = require('../utils/generateOTP')
 
-const maxAgeAccessToken = 1 * 60 * 60;
+const maxAgeAccessToken = 24 * 60 * 60;
 // const maxAgeAccessToken = 10;
 const maxAgeRefreshToken = 7 * 24 * 60 * 60;
 // const maxAgeRefreshToken = 10;
@@ -21,7 +21,7 @@ const createToken = (id, age, tokenSecret) => {
 };
 
 module.exports.signup = async (req, res) => {
-	const { email, password, phone, name } = req.body;
+	const { email, password, phone, name, userType } = req.body;
 
 	try {
 		const user = await loginModel.findOne({
@@ -39,11 +39,40 @@ module.exports.signup = async (req, res) => {
 			if (!emailCheck.result) {
 				handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
 			} else {
+				if(userType === "tourist"){
+					var surveys = {
+						"touristFeedback": false
+					}
+				} else{
+					var surveys = {
+							"transport": false,
+							"sanitization": false,
+							"water": false,
+							"electricity": false,
+							"education": false,
+							"health": false,
+							"food": false,
+							"employment": false,
+							"greenCover": false,
+							"openSpacesPublicSpaces": false,
+							"vedic": false,
+							"industry": false,
+							"roadInfrastructure": false,
+							"greenEnergy": false,
+							"constructionPractice": false,
+							"informationAccess": false,
+							"crimesInstances": false,
+							"weather": false
+					}
+				}
+				console.log(surveys);
 				const user = await loginModel.create({
 					email,
 					password,
 					phone,
 					name,
+					userType,
+					surveys
 				});
 				const accessToken = createToken(user._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
 				const refreshToken = createToken(user._id, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
