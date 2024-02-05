@@ -21,20 +21,17 @@ module.exports.touristFeedback = async (req, res) => {
 				console.log("Feedback already exists");
 				res.send(userFeedback);
 			} else {
-
-				const arr = [{ why: fields.cleanliness.why }, { how: fields.cleanliness.how }];
-
 				const feedback = await touristFeedbackModel.create({
 					email: user.email,
-					"cleanliness.rating": fields.cleanliness.rating,
-					"accessToTp.rating": fields.accessToTp.rating,
-					"costEffectiveTp.rating": fields.costEffectiveTp.rating,
-					"stay.rating": fields.stay.rating,
-					"hygiene.rating": fields.hygiene.rating,
-					"disabilityFriendly.rating": fields.disabilityFriendly.rating,
+					"cleanliness": fields.cleanliness,
+					"accessToTp": fields.accessToTp,
+					"costEffectiveTp": fields.costEffectiveTp,
+					"stay": fields.stay,
+					"hygiene": fields.hygiene,
+					"disabilityFriendly": fields.disabilityFriendly,
 					completed: fields.cleanliness && fields.accessToTp && fields.costEffectiveTp && fields.stay && fields.hygiene && fields.disabilityFriendly ? true : false,
 				});
-				await touristFeedbackModel.findOneAndUpdate({ _id: feedback._id }, { "cleanliness.reasons": arr  });
+				// await touristFeedbackModel.findOneAndUpdate({ _id: feedback._id }, { "cleanliness.reasons": arr  });
 				if (feedback.completed) await loginModel.updateOne({ _id: user._id }, { $set: { "surveys.touristFeedback": true } });
 				res.send(feedback);
 			}
