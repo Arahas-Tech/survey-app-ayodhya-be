@@ -71,7 +71,8 @@ const userLogin = new mongoose.Schema(
 		},
 		userType: {
 			type: String,
-			required: true,
+			// required: true,
+			default: "tourist"
 		},
 		password: {
 			type: String,

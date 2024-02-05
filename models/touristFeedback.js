@@ -18,12 +18,30 @@ const touristFeedback = new mongoose.Schema(
 			unique: true,
 			required: true,
 		},
-		cleanliness: subFields,
-		accessToTp: subFields,
-		costEffectiveTp: subFields,
-		stay: subFields,
-		hygiene: subFields,
-		disabilityFriendly: subFields,
+		cleanliness: {
+			type: subFields,
+			default: null,
+		},
+		accessToTp: {
+			type: subFields,
+			default: null,
+		},
+		costEffectiveTp: {
+			type: subFields,
+			default: null,
+		},
+		stay: {
+			type: subFields,
+			default: null,
+		},
+		hygiene: {
+			type: subFields,
+			default: null,
+		},
+		disabilityFriendly: {
+			type: subFields,
+			default: null,
+		},
 		completed: {
 			type: Boolean,
 			default: false,
