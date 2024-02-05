@@ -1,5 +1,16 @@
 const mongoose = require("mongoose");
 
+const subFields = new mongoose.Schema({
+	_id: false,
+	rating: {
+		type: Number,
+		min: 1,
+		max: 5,
+		default: null,
+	},
+	reasons: [],
+});
+
 const touristFeedback = new mongoose.Schema(
 	{
 		email: {
@@ -7,53 +18,22 @@ const touristFeedback = new mongoose.Schema(
 			unique: true,
 			required: true,
 		},
-		cleanliness: {
-			type: Number,
-			min: 1,
-			max: 5,
-            required: true,
+		cleanliness: subFields,
+		accessToTp: subFields,
+		costEffectiveTp: subFields,
+		stay: subFields,
+		hygiene: subFields,
+		disabilityFriendly: subFields,
+		completed: {
+			type: Boolean,
+			default: false,
 		},
-		accessToTp: {
-			type: Number,
-			min: 1,
-			max: 5,
-            required: true,
-		},
-		costEffectiveTp: {
-			type: Number,
-			min: 1,
-			max: 5,
-            required: true,
-		},
-		lodging: {
-			type: Number,
-			min: 1,
-			max: 5,
-            required: true,
-		},
-		hygiene: {
-			type: Number,
-			min: 1,
-			max: 5,
-            required: true,
-		},
-		disabilityFriendly: {
-			type: Number,
-			min: 1,
-			max: 5,
-            required: true,
-		},
-		// totalScore: {
-		// 	type: Number,
-		// 	min: 1,
-		// 	max: 5,
-		// },
 	},
 	{
 		versionKey: false,
 	}
 );
 
-const userFeedbackModel = new mongoose.model('touristFeedback', touristFeedback)
+const userFeedbackModel = new mongoose.model("touristFeedback", touristFeedback);
 
-module.exports = userFeedbackModel ;
+module.exports = userFeedbackModel;

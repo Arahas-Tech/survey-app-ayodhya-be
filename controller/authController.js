@@ -33,37 +33,37 @@ module.exports.signup = async (req, res) => {
 			res.send("User email or phone number already exists");
 		} else {
 			const emailCheck = await emailValidator(email);
-
 			console.log(emailCheck);
 
 			if (!emailCheck.result) {
+				// if (false) {
 				handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
 			} else {
-				if(userType === "tourist"){
+				if (userType === "tourist") {
 					var surveys = {
-						"touristFeedback": false
-					}
-				} else{
+						touristFeedback: false,
+					};
+				} else {
 					var surveys = {
-							"transport": false,
-							"sanitization": false,
-							"water": false,
-							"electricity": false,
-							"education": false,
-							"health": false,
-							"food": false,
-							"employment": false,
-							"greenCover": false,
-							"openSpacesPublicSpaces": false,
-							"vedic": false,
-							"industry": false,
-							"roadInfrastructure": false,
-							"greenEnergy": false,
-							"constructionPractice": false,
-							"informationAccess": false,
-							"crimesInstances": false,
-							"weather": false
-					}
+						transport: false,
+						sanitization: false,
+						water: false,
+						electricity: false,
+						education: false,
+						health: false,
+						food: false,
+						employment: false,
+						greenCover: false,
+						openSpacesPublicSpaces: false,
+						vedic: false,
+						industry: false,
+						roadInfrastructure: false,
+						greenEnergy: false,
+						constructionPractice: false,
+						informationAccess: false,
+						crimesInstances: false,
+						weather: false,
+					};
 				}
 				console.log(surveys);
 				const user = await loginModel.create({
@@ -72,7 +72,7 @@ module.exports.signup = async (req, res) => {
 					phone,
 					name,
 					userType,
-					surveys
+					surveys,
 				});
 				const accessToken = createToken(user._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
 				const refreshToken = createToken(user._id, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -110,7 +110,7 @@ module.exports.getUserDetailFromToken = async (req, res) => {
 					accessToken: authToken,
 				});
 				if (!user) {
-					handleError(res,404,"No user found with this token")
+					handleError(res, 404, "No user found with this token");
 				} else {
 					res.send(userView(user));
 					console.log("Login authenticated using access token");
