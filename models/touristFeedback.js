@@ -13,10 +13,18 @@ const subFields = new mongoose.Schema({
 
 const touristFeedback = new mongoose.Schema(
 	{
-		email: {
+		surveyorEmail: {
 			type: String,
-			unique: true,
-			required: true,
+			required: true
+		},
+		touristEmail: {
+			type: String,
+			default: "Anonymous"
+		},
+		touristPhone: {
+			type: String,
+			match: /((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\d{5}([- ]*)\d{6}/,
+			default: null
 		},
 		cleanliness: {
 			type: subFields,
@@ -41,10 +49,6 @@ const touristFeedback = new mongoose.Schema(
 		disabilityFriendly: {
 			type: subFields,
 			default: null,
-		},
-		completed: {
-			type: Boolean,
-			default: false,
 		},
 	},
 	{

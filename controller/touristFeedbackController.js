@@ -1,5 +1,5 @@
 const touristFeedbackModel = require("../models/touristFeedback");
-const loginModel = require("../models/loginModel");
+const { surveyorLoginModel } = require("../models/loginModel");
 const handleError = require("../utils/handleError");
 const verifyToken = require("../utils/verifyToken");
 
@@ -8,35 +8,27 @@ module.exports.touristFeedback = async (req, res) => {
 	try {
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);
 		const fields = req.body;
-		const user = await loginModel.findOne({
+		const surveyor = await surveyorLoginModel.findOne({
 			accessToken: authToken,
 		});
-		const userFeedback = await touristFeedbackModel.findOne({
-			email: user.email,
-		});
-		if (!user) {
+		if (!surveyor) {
 			handleError(res, 401, "Access Denied");
 		} else {
-			if (userFeedback) {
-				console.log("Feedback already exists");
-				res.send(userFeedback);
-			} else {
-				const feedback = await touristFeedbackModel.create({
-					email: user.email,
-					"cleanliness": fields.cleanliness,
-					"accessToTp": fields.accessToTp,
-					"costEffectiveTp": fields.costEffectiveTp,
-					"stay": fields.stay,
-					"hygiene": fields.hygiene,
-					"disabilityFriendly": fields.disabilityFriendly,
-					completed: fields.cleanliness && fields.accessToTp && fields.costEffectiveTp && fields.stay && fields.hygiene && fields.disabilityFriendly ? true : false,
-				});
-				// await touristFeedbackModel.findOneAndUpdate({ _id: feedback._id }, { "cleanliness.reasons": arr  });
-				if (feedback.completed) await loginModel.updateOne({ _id: user._id }, { $set: { "surveys.touristFeedback": true } });
-				res.send(feedback);
-			}
+			await touristFeedbackModel.create({
+				surveyorEmail: surveyor.email,
+				touristEmail: fields.email,
+				touristPhone: fields.phone,
+				cleanliness: fields.cleanliness,
+				accessToTp: fields.accessToTp,
+				costEffectiveTp: fields.costEffectiveTp,
+				stay: fields.stay,
+				hygiene: fields.hygiene,
+				disabilityFriendly: fields.disabilityFriendly,
+			});
+			await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { surveysConducted: 1 } });
+			res.send("Survey Completed");
 		}
 	} catch (error) {
-		handleError(res, 401, error);
+		handleError(res, 400, error);
 	}
 };

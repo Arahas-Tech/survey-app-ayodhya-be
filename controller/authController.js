@@ -1,4 +1,4 @@
-const loginModel = require("../models/loginModel");
+const { loginModel, surveyorLoginModel } = require("../models/loginModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -21,10 +21,10 @@ const createToken = (id, age, tokenSecret) => {
 };
 
 module.exports.signup = async (req, res) => {
-	const { email, password, phone, name, userType } = req.body;
+	const { email, password, phone, name } = req.body;
 
 	try {
-		const user = await loginModel.findOne({
+		const surveyor = await loginModel.findOne({
 			$or: [{ email: email }, { phone: phone }],
 		});
 
@@ -39,40 +39,11 @@ module.exports.signup = async (req, res) => {
 				// if (false) {
 				handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
 			} else {
-				if (userType === "tourist") {
-					var surveys = {
-						touristFeedback: false,
-					};
-				} else {
-					var surveys = {
-						transport: false,
-						sanitization: false,
-						water: false,
-						electricity: false,
-						education: false,
-						health: false,
-						food: false,
-						employment: false,
-						greenCover: false,
-						openSpacesPublicSpaces: false,
-						vedic: false,
-						industry: false,
-						roadInfrastructure: false,
-						greenEnergy: false,
-						constructionPractice: false,
-						informationAccess: false,
-						crimesInstances: false,
-						weather: false,
-					};
-				}
-				console.log(surveys);
 				const user = await loginModel.create({
 					email,
 					password,
 					phone,
 					name,
-					userType,
-					surveys,
 				});
 				const accessToken = createToken(user._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
 				const refreshToken = createToken(user._id, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -86,6 +57,50 @@ module.exports.signup = async (req, res) => {
 				user.refreshToken = refreshToken;
 				console.log("Account successfully created");
 				res.send(userView(user));
+			}
+		}
+	} catch (error) {
+		handleError(res, 400, "Error in signIn/creating account- " + error);
+	}
+};
+
+module.exports.surveyorSignup = async (req, res) => {
+	const { email, password, phone, name } = req.body;
+
+	try {
+		const surveyor = await surveyorLoginModel.findOne({
+			$or: [{ email: email }, { phone: phone }],
+		});
+		if (surveyor) {
+			console.log("User email or phone number already exists");
+			res.send("User email or phone number already exists");
+		} else {
+			const emailCheck = await emailValidator(email);
+			console.log(emailCheck);
+
+			if (!emailCheck.result) {
+				// if(false){
+				handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
+			} else {
+				console.log('reached');
+				const surveyor = await surveyorLoginModel.create({
+					email,
+					password,
+					phone,
+					name,
+				});
+				const accessToken = createToken(surveyor._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+				const refreshToken = createToken(surveyor._id, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+				await surveyor.updateOne({
+					$set: {
+						accessToken: accessToken,
+						refreshToken: refreshToken,
+					},
+				});
+				surveyor.accessToken = accessToken;
+				surveyor.refreshToken = refreshToken;
+				console.log("Account successfully created");
+				res.send(userView(surveyor));
 			}
 		}
 	} catch (error) {
@@ -182,19 +197,71 @@ module.exports.login = async (req, res) => {
 	}
 };
 
+module.exports.surveyorLogin = async (req, res) => {
+	const surveyor = req.body;
+	try {
+		const surveyorAuth = await surveyorLoginModel.findOne({
+			$or: [{ email: surveyor.email }, { phone: surveyor.phone }],
+		});
+
+		if (!surveyorAuth) {
+			handleError(res, 404, "No account with this email or phone number.");
+		} else {
+			const auth = await bcrypt.compare(surveyor.password, surveyorAuth.password);
+			if (!auth) {
+				handleError(res, 401, "Credentials don't match.");
+			} else {
+				console.log("Authentication successful");
+				const authToken = createToken(surveyorAuth._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+				const refreshToken = createToken(surveyorAuth._i, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+				try {
+					const updatedSurveyor = await surveyorLoginModel.findOneAndUpdate(
+						{
+							$or: [{ email: surveyor.email }, { phone: surveyor.phone }],
+						},
+						{
+							accessToken: authToken,
+							refreshToken: refreshToken,
+						},
+						{ new: true }
+					);
+					res.send(userView(updatedSurveyor));
+				} catch (err) {
+					handleError(res, 500, "ERROR WHILE UPDATING TOKEN- " + err);
+				}
+			}
+		}
+	} catch (error) {
+		handleError(res, 502, "Error getting the req- " + error);
+	}
+};
+
 module.exports.logout = async (req, res) => {
 	const authToken = req.headers["authorization"].split(" ")[1];
+	const userType = req.body;
 	try {
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);
-		const user = await loginModel.findOneAndUpdate(
-			{
-				accessToken: authToken,
-			},
-			{
-				accessToken: null,
-				refreshToken: null,
-			}
-		);
+		if (userType === "resident") {
+			await surveyorLoginModel.findOneAndUpdate(
+				{
+					accessToken: authToken,
+				},
+				{
+					accessToken: null,
+					refreshToken: null,
+				}
+			);
+		} else {
+			await surveyorLoginModel.findOneAndUpdate(
+				{
+					accessToken: authToken,
+				},
+				{
+					accessToken: null,
+					refreshToken: null,
+				}
+			);
+		}
 		res.send("You have been Logged out.");
 	} catch (error) {
 		handleError(res, 401, error);
