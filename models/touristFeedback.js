@@ -15,16 +15,16 @@ const touristFeedback = new mongoose.Schema(
 	{
 		surveyorEmail: {
 			type: String,
-			required: true
+			required: true,
 		},
 		touristEmail: {
 			type: String,
-			default: "Anonymous"
+			default: "Anonymous",
 		},
 		touristPhone: {
 			type: String,
 			match: /((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\d{5}([- ]*)\d{6}/,
-			default: null
+			default: null,
 		},
 		cleanliness: {
 			type: subFields,
@@ -53,9 +53,10 @@ const touristFeedback = new mongoose.Schema(
 	},
 	{
 		versionKey: false,
+		timestamps: true,
 	}
 );
 
-const userFeedbackModel = new mongoose.model("touristFeedback", touristFeedback);
+const feedbackModel = new mongoose.model("touristFeedback", touristFeedback);
 
-module.exports = userFeedbackModel;
+module.exports = feedbackModel;

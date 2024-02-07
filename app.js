@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoutes");
 const feedbackRouter = require("./routes/outsideFeedbackRoutes");
+const transportFeedbackRouter = require("./routes/transportFeedbackRoutes");
 
 const app = express();
 const PORT = process.env.port || 5000;
@@ -31,6 +32,7 @@ app.use((_, res, next) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/feedback", feedbackRouter);
+app.use("/api/transportFeedback", transportFeedbackRouter)
 
 app.listen(PORT, () => {
 	console.log("Server is running");
