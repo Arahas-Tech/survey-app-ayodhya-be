@@ -12,23 +12,22 @@ module.exports.touristFeedback = async (req, res) => {
 			accessToken: authToken,
 		});
 		if (!surveyor) {
-			handleError(res, 401, "Access Denied");
-		} else {
-			await touristFeedbackModel.create({
-				surveyorEmail: surveyor.email,
-				touristEmail: fields.email,
-				touristPhone: fields.phone,
-				cleanliness: fields.cleanliness,
-				accessToTp: fields.accessToTp,
-				costEffectiveTp: fields.costEffectiveTp,
-				stay: fields.stay,
-				hygiene: fields.hygiene,
-				disabilityFriendly: fields.disabilityFriendly,
-			});
-			await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { surveysConducted: 1 } });
-			res.send("Survey Completed");
+			return handleError(res, 401, "Access Denied");
 		}
+		await touristFeedbackModel.create({
+			surveyorEmail: surveyor.email,
+			touristEmail: fields.email,
+			touristPhone: fields.phone,
+			cleanliness: fields.cleanliness,
+			accessToTp: fields.accessToTp,
+			costEffectiveTp: fields.costEffectiveTp,
+			stay: fields.stay,
+			hygiene: fields.hygiene,
+			disabilityFriendly: fields.disabilityFriendly,
+		});
+		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { surveysConducted: 1 } });
+		res.send("Survey Completed");
 	} catch (error) {
-		handleError(res, 400, error);
+		return handleError(res, 400, error);
 	}
 };

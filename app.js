@@ -4,8 +4,9 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoutes");
-const feedbackRouter = require("./routes/outsideFeedbackRoutes");
-const transportFeedbackRouter = require("./routes/transportFeedbackRoutes");
+const touristFeedbackRouter = require("./routes/outsideFeedbackRoutes");
+const residentFeedbackRouter = require("./routes/residentRouters/residentFeedbackRouters");
+
 
 const app = express();
 const PORT = process.env.port || 5000;
@@ -31,8 +32,8 @@ app.use((_, res, next) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/feedback", feedbackRouter);
-app.use("/api/transportFeedback", transportFeedbackRouter)
+app.use("/api/touristFeedback", touristFeedbackRouter);
+app.use("/api/residents", residentFeedbackRouter);
 
 app.listen(PORT, () => {
 	console.log("Server is running");

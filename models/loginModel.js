@@ -3,19 +3,11 @@ const bcrypt = require("bcrypt");
 
 const survey = new mongoose.Schema({
 	_id: false,
-	transport: {
+	constructionPractice: {
 		type: Boolean,
 		default: false
 	},
-	sanitization: {
-		type: Boolean,
-		default: false
-	},
-	water: {
-		type: Boolean,
-		default: false
-	},
-	electricity: {
+	crimesInstances: {
 		type: Boolean,
 		default: false
 	},
@@ -23,11 +15,7 @@ const survey = new mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
-	health: {
-		type: Boolean,
-		default: false
-	},
-	food: {
+	electricity: {
 		type: Boolean,
 		default: false
 	},
@@ -35,23 +23,11 @@ const survey = new mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
+	food: {
+		type: Boolean,
+		default: false
+	},
 	greenCover: {
-		type: Boolean,
-		default: false
-	},
-	openSpacesPublicSpaces: {
-		type: Boolean,
-		default: false
-	},
-	vedic: {
-		type: Boolean,
-		default: false
-	},
-	industry: {
-		type: Boolean,
-		default: false
-	},
-	roadInfrastructure: {
 		type: Boolean,
 		default: false
 	},
@@ -59,7 +35,11 @@ const survey = new mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
-	constructionPractice: {
+	health: {
+		type: Boolean,
+		default: false
+	},
+	industry: {
 		type: Boolean,
 		default: false
 	},
@@ -67,7 +47,27 @@ const survey = new mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
-	crimesInstances: {
+	openSpacesPublicSpaces: {
+		type: Boolean,
+		default: false
+	},
+	roadInfrastructure: {
+		type: Boolean,
+		default: false
+	},
+	sanitization: {
+		type: Boolean,
+		default: false
+	},
+	transport: {
+		type: Boolean,
+		default: false
+	},
+	vedic: {
+		type: Boolean,
+		default: false
+	},
+	water: {
 		type: Boolean,
 		default: false
 	},
