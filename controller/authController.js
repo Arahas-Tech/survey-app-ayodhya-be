@@ -174,7 +174,7 @@ module.exports.login = async (req, res) => {
 		try {
 			const updatedUser = await loginModel.findOneAndUpdate(
 				{
-					$or: [{ email: user.email }, { phone: user.phone }],
+					$or: [{ email: user.phoneNumberOrEmail }, { phone: user.phoneNumberOrEmail }],
 				},
 				{
 					accessToken: authToken,
