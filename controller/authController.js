@@ -158,7 +158,7 @@ module.exports.login = async (req, res) => {
 	const user = req.body;
 	try {
 		const userAuth = await loginModel.findOne({
-			$or: [{ email: user.email }, { phone: user.phone }],
+			$or: [{ email: user.phoneNumberOrEmail }, { phone: user.phoneNumberOrEmail }],
 		});
 
 		if (!userAuth) {
@@ -177,7 +177,6 @@ module.exports.login = async (req, res) => {
 					$or: [{ email: user.email }, { phone: user.phone }],
 				},
 				{
-					name: "name is changed",
 					accessToken: authToken,
 					refreshToken: refreshToken,
 				},
