@@ -5,75 +5,75 @@ const survey = new mongoose.Schema({
 	_id: false,
 	constructionPractice: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	crimesInstances: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	education: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	electricity: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	employment: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	food: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	greenCover: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	greenEnergy: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	health: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	industry: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	informationAccess: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	openSpacesPublicSpaces: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	roadInfrastructure: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	sanitization: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	transport: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	vedic: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	water: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	weather: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 });
 
@@ -106,7 +106,7 @@ const userLogin = new mongoose.Schema(
 			type: String,
 		},
 		surveys: {
-			type: survey
+			type: survey,
 		},
 	},
 	{
@@ -114,7 +114,6 @@ const userLogin = new mongoose.Schema(
 		timestamps: true,
 	}
 );
-
 
 const surveyorLogin = new mongoose.Schema(
 	{
@@ -138,7 +137,7 @@ const surveyorLogin = new mongoose.Schema(
 		},
 		surveysConducted: {
 			type: Number,
-			default: 0 
+			default: 0,
 		},
 		accessToken: {
 			type: String,
