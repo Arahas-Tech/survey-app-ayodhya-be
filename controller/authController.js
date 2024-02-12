@@ -39,33 +39,11 @@ module.exports.signup = async (req, res) => {
 			// if (false) {
 				return handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
 			}
-			const surveys = {
-				constructionPractice: false,
-				crimesInstances: false,
-				education: false,
-				electricity: false,
-				employment: false,
-				food: false,
-				greenCover: false,
-				greenEnergy: false,
-				health: false,
-				industry: false,
-				informationAccess: false,
-				openSpacesPublicSpaces: false,
-				roadInfrastructure: false,
-				sanitization: false,
-				transport: false,
-				vedic: false,
-				water: false,
-				weather: false,
-			};
-
 			const user = await loginModel.create({
 				email,
 				password,
 				phone,
 				name,
-				surveys,
 			});
 			const accessToken = createToken(user._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
 			const refreshToken = createToken(user._id, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
