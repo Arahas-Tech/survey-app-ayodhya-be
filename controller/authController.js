@@ -195,7 +195,7 @@ module.exports.surveyorLogin = async (req, res) => {
 	const surveyor = req.body;
 	try {
 		const surveyorAuth = await surveyorLoginModel.findOne({
-			$or: [{ email: surveyor.email }, { phone: surveyor.phone }],
+			$or: [{ email: surveyor.phoneNumberOrEmail }, { phone: surveyor.phoneNumberOrEmail }],
 		});
 
 		if (!surveyorAuth) {
