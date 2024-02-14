@@ -211,7 +211,7 @@ module.exports.surveyorLogin = async (req, res) => {
 		try {
 			const updatedSurveyor = await surveyorLoginModel.findOneAndUpdate(
 				{
-					$or: [{ email: surveyor.email }, { phone: surveyor.phone }],
+					$or: [{ email: surveyor.phoneNumberOrEmail }, { phone: surveyor.phoneNumberOrEmail }],
 				},
 				{
 					accessToken: authToken,
@@ -221,7 +221,7 @@ module.exports.surveyorLogin = async (req, res) => {
 			);
 			res.send(userView(updatedSurveyor));
 		} catch (err) {
-			return handleError(res, 500, "ERROR WHILE UPDATING TOKEN- " + err);
+			return handleError(res, 500, "ERROR WHILE UPDATING TOKEN FOR SURVEYOR- " + err);
 		}
 	} catch (error) {
 		return handleError(res, 502, "Error getting the req- " + error);
