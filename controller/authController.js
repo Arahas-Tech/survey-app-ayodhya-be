@@ -5,8 +5,8 @@ const bcrypt = require("bcrypt");
 // util functions
 const handleError = require("../utils/handleError");
 const emailValidator = require("../utils/emailValidator");
-const userView = require("../utils/userView");
 const verifyToken = require("../utils/verifyToken");
+const { surveyorView, userView } = require("../utils/views");
 // const generateOTP = require('../utils/generateOTP')
 
 const maxAgeAccessToken = 24 * 60 * 60;
@@ -99,7 +99,7 @@ module.exports.surveyorSignup = async (req, res) => {
 			surveyor.accessToken = accessToken;
 			surveyor.refreshToken = refreshToken;
 			console.log("Account successfully created");
-			res.send(userView(surveyor));
+			res.send(surveyorView(surveyor));
 		}
 	} catch (error) {
 		return handleError(res, 400, "Error in signIn/creating account- " + error);
@@ -219,7 +219,7 @@ module.exports.surveyorLogin = async (req, res) => {
 				},
 				{ new: true }
 			);
-			res.send(userView(updatedSurveyor));
+			res.send(surveyorView(updatedSurveyor));
 		} catch (err) {
 			return handleError(res, 500, "ERROR WHILE UPDATING TOKEN FOR SURVEYOR- " + err);
 		}
