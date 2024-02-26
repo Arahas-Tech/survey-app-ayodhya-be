@@ -4,8 +4,8 @@ const handleError = require("../../utils/handleError");
 const verifyToken = require("../../utils/verifyToken");
 
 module.exports.getTransportFeedback = async (req, res) => {
-	const authToken = req.headers["authorization"].split(" ")[1];
 	try {
+		const authToken = req.headers["authorization"].split(" ")[1];
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);
 		const fields = req.body;
 		const user = await loginModel.findOne({

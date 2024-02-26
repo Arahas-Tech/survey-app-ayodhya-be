@@ -21,9 +21,8 @@ const createToken = (id, age, tokenSecret) => {
 };
 
 module.exports.signup = async (req, res) => {
-	const { email, password, phone, name } = req.body;
-
 	try {
+		const { email, password, phone, name } = req.body;
 		const user = await loginModel.findOne({
 			$or: [{ email: email }, { phone: phone }],
 		});
@@ -36,7 +35,7 @@ module.exports.signup = async (req, res) => {
 			console.log(emailCheck);
 
 			if (!emailCheck.result) {
-			// if (false) {
+				// if (false) {
 				return handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
 			}
 			const user = await loginModel.create({
@@ -64,9 +63,9 @@ module.exports.signup = async (req, res) => {
 };
 
 module.exports.surveyorSignup = async (req, res) => {
-	const { email, password, phone, name } = req.body;
-
+	
 	try {
+		const { email, password, phone, name } = req.body;
 		const surveyor = await surveyorLoginModel.findOne({
 			$or: [{ email: email }, { phone: phone }],
 		});
@@ -107,14 +106,14 @@ module.exports.surveyorSignup = async (req, res) => {
 };
 
 module.exports.getUserDetailFromToken = async (req, res) => {
-	const authToken = req.headers["authorization"].split(" ")[1];
-	const refreshToken = req.headers["authorization"].split(" ")[2];
-
-	if ((!authToken && !refreshToken) || !refreshToken) {
-		return handleError(res, 401, "Access Denied. Login in again");
-	}
-
+	
 	try {
+		const authToken = req.headers["authorization"].split(" ")[1];
+		const refreshToken = req.headers["authorization"].split(" ")[2];
+	
+		if ((!authToken && !refreshToken) || !refreshToken) {
+			return handleError(res, 401, "Access Denied. Login in again");
+		}
 		verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET, true);
 		const accessTokenVerification = verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, false);
 		if (accessTokenVerification) {
@@ -155,8 +154,8 @@ module.exports.getUserDetailFromToken = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
-	const user = req.body;
 	try {
+		const user = req.body;
 		const userAuth = await loginModel.findOne({
 			$or: [{ email: user.phoneNumberOrEmail }, { phone: user.phoneNumberOrEmail }],
 		});
@@ -192,8 +191,8 @@ module.exports.login = async (req, res) => {
 };
 
 module.exports.surveyorLogin = async (req, res) => {
-	const surveyor = req.body;
 	try {
+		const surveyor = req.body;
 		const surveyorAuth = await surveyorLoginModel.findOne({
 			$or: [{ email: surveyor.phoneNumberOrEmail }, { phone: surveyor.phoneNumberOrEmail }],
 		});
@@ -229,9 +228,9 @@ module.exports.surveyorLogin = async (req, res) => {
 };
 
 module.exports.logout = async (req, res) => {
-	const authToken = req.headers["authorization"].split(" ")[1];
-	const userType = req.body;
 	try {
+		const authToken = req.headers["authorization"].split(" ")[1];
+		const userType = req.body;
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);
 		if (userType === "resident") {
 			await surveyorLoginModel.findOneAndUpdate(
