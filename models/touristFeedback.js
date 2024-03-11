@@ -17,9 +17,13 @@ const touristFeedback = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		touristEmail: {
+		touristName:{ 
 			type: String,
-			default: "Anonymous",
+			default: 'Anonymous'
+		},
+		touristCity: {
+			type: String,
+			required: true,
 		},
 		touristPhone: {
 			type: String,

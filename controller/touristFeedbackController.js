@@ -16,7 +16,8 @@ module.exports.touristFeedback = async (req, res) => {
 		}
 		await touristFeedbackModel.create({
 			surveyorEmail: surveyor.email,
-			touristEmail: fields.email,
+			touristName: fields.name,
+			touristCity: fields.city,
 			touristPhone: fields.phone,
 			cleanliness: fields.cleanliness,
 			accessToTp: fields.accessToTp,

@@ -80,7 +80,7 @@ module.exports.surveyorSignup = async (req, res) => {
 				// if(false){
 				return handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
 			}
-			console.log("reached");
+			// console.log("reached");
 			const surveyor = await surveyorLoginModel.create({
 				email,
 				password,
