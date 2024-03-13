@@ -6,7 +6,8 @@ const subFields = new mongoose.Schema({
 		type: Number,
 		min: 1,
 		max: 5,
-		default: null,
+		// default: null,
+		required: true,
 	},
 	reasons: [],
 });
