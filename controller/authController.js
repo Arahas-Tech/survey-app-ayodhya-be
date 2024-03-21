@@ -6,16 +6,14 @@ const bcrypt = require("bcrypt");
 const handleError = require("../utils/handleError");
 const emailValidator = require("../utils/emailValidator");
 const verifyToken = require("../utils/verifyToken");
-const { surveyorView, userView } = require("../utils/views");
+const { surveyorView, userView, tokens } = require("../utils/views");
 // const generateOTP = require('../utils/generateOTP')
 
 const maxAgeAccessToken = 24 * 60 * 60;
-// const maxAgeAccessToken = 10;
 const maxAgeRefreshToken = 7 * 24 * 60 * 60;
-// const maxAgeRefreshToken = 10;
 
 const createToken = (id, age, tokenSecret) => {
-	return jwt.sign({ id }, tokenSecret, {
+	return jwt.sign( id, tokenSecret, {
 		expiresIn: age,
 	});
 };
@@ -44,8 +42,8 @@ module.exports.signup = async (req, res) => {
 				phone,
 				name,
 			});
-			const accessToken = createToken(user._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
-			const refreshToken = createToken(user._id, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+			const accessToken = createToken({ id: user._id, isAdmin: user.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+			const refreshToken = createToken({ id: user._id, isAdmin: user.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
 			await user.updateOne({
 				$set: {
 					accessToken: accessToken,
@@ -87,8 +85,8 @@ module.exports.surveyorSignup = async (req, res) => {
 				phone,
 				name,
 			});
-			const accessToken = createToken(surveyor._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
-			const refreshToken = createToken(surveyor._id, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+			const accessToken = createToken({id: user._id, isAdmin: surveyor.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+			const refreshToken = createToken({id: user._id, isAdmin: surveyor.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
 			await surveyor.updateOne({
 				$set: {
 					accessToken: accessToken,
@@ -98,7 +96,7 @@ module.exports.surveyorSignup = async (req, res) => {
 			surveyor.accessToken = accessToken;
 			surveyor.refreshToken = refreshToken;
 			console.log("Account successfully created");
-			res.send(surveyorView(surveyor));
+			res.send(tokens(surveyor));
 		}
 	} catch (error) {
 		return handleError(res, 400, "Error in signIn/creating account- " + error);
@@ -134,7 +132,7 @@ module.exports.getUserDetailFromToken = async (req, res) => {
 			if (!user) {
 				res.send("User Logged Out");
 			} else {
-				const accessToken = createToken(user._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+				const accessToken = createToken({id: user._id, isAdmin: user.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
 				const updatedUser = await loginModel.findOneAndUpdate(
 					{
 						refreshToken: refreshToken,
@@ -168,8 +166,8 @@ module.exports.login = async (req, res) => {
 			return handleError(res, 401, "Credentials don't match.");
 		}
 		console.log("Authentication successful");
-		const authToken = createToken(userAuth._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
-		const refreshToken = createToken(userAuth._i, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+		const authToken = createToken({id: user._id, isAdmin: userAuth.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+		const refreshToken = createToken({id: user._id, isAdmin: userAuth.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
 		try {
 			const updatedUser = await loginModel.findOneAndUpdate(
 				{
@@ -205,8 +203,9 @@ module.exports.surveyorLogin = async (req, res) => {
 			return handleError(res, 401, "Credentials don't match.");
 		}
 		console.log("Authentication successful");
-		const authToken = createToken(surveyorAuth._id, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
-		const refreshToken = createToken(surveyorAuth._i, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+		console.log(surveyorAuth.isAdmin);
+		const authToken = createToken({id:surveyorAuth._id, isAdmin: surveyorAuth.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+		const refreshToken = createToken({id:surveyorAuth._id, isAdmin: surveyorAuth.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
 		try {
 			const updatedSurveyor = await surveyorLoginModel.findOneAndUpdate(
 				{
@@ -218,9 +217,9 @@ module.exports.surveyorLogin = async (req, res) => {
 				},
 				{ new: true }
 			);
-			res.send(surveyorView(updatedSurveyor));
+			res.send(tokens(updatedSurveyor));
 		} catch (err) {
-			return handleError(res, 500, "ERROR WHILE UPDATING TOKEN FOR SURVEYOR- " + err);
+			return handleError(res, 500, "ERROR WHILE UPDATING TOKEN- " + err);
 		}
 	} catch (error) {
 		return handleError(res, 502, "Error getting the req- " + error);
