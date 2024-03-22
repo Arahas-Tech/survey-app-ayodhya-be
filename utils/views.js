@@ -1,5 +1,6 @@
 module.exports.tokens = (data) => {
 	const tokenData = {
+		isAdmin: data.isAdmin,
 		accessToken: data.accessToken,
 		refreshToken: data.refreshToken,
 		// temp: data.accessToken + " " + data.refreshToken,

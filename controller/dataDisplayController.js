@@ -7,7 +7,6 @@ module.exports.surveyOverview = async (req, res) => {
 	try {
 		const auth = req.headers["authorization"].split(" ")[1];
 		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
-		// const data = req.body;
 		const admin = await surveyorLoginModel.findOne({
 			accessToken: auth,
 		});

@@ -26,7 +26,7 @@ module.exports.touristFeedback = async (req, res) => {
 			hygiene: fields.hygiene,
 			disabilityFriendly: fields.disabilityFriendly,
 		});
-		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { surveysConducted: 1 } });
+		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { touristSurveys: 1 } });
 		res.send("Survey Completed");
 	} catch (error) {
 		return handleError(res, 400, error);

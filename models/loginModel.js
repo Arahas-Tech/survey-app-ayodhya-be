@@ -150,7 +150,11 @@ const surveyorLogin = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		surveysConducted: {
+		gisSurveys: {
+			type: Number,
+			default: 0,
+		},
+		touristSurveys: {
 			type: Number,
 			default: 0,
 		},

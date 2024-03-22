@@ -85,8 +85,8 @@ module.exports.surveyorSignup = async (req, res) => {
 				phone,
 				name,
 			});
-			const accessToken = createToken({id: user._id, isAdmin: surveyor.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
-			const refreshToken = createToken({id: user._id, isAdmin: surveyor.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+			const accessToken = createToken({id: surveyor._id, isAdmin: surveyor.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
+			const refreshToken = createToken({id: surveyor._id, isAdmin: surveyor.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
 			await surveyor.updateOne({
 				$set: {
 					accessToken: accessToken,
