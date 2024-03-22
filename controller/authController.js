@@ -7,6 +7,8 @@ const handleError = require("../utils/handleError");
 const emailValidator = require("../utils/emailValidator");
 const verifyToken = require("../utils/verifyToken");
 const { surveyorView, userView, tokens } = require("../utils/views");
+const roles = require("../models/roleModel");
+const { roleCheck } = require("../utils/roleCheck");
 // const generateOTP = require('../utils/generateOTP')
 
 const maxAgeAccessToken = 24 * 60 * 60;
@@ -63,6 +65,10 @@ module.exports.signup = async (req, res) => {
 module.exports.surveyorSignup = async (req, res) => {
 	
 	try {
+		const auth = req.headers["authorization"].split(" ")[1];
+		const admin = await surveyorLoginModel.findOne({accessToken: auth})
+		if(! await roleCheck(res, admin, 'surveyor_signup'))	return res.send('Access Denied')
+
 		const { email, password, phone, name } = req.body;
 		const surveyor = await surveyorLoginModel.findOne({
 			$or: [{ email: email }, { phone: phone }],
@@ -78,7 +84,6 @@ module.exports.surveyorSignup = async (req, res) => {
 				// if(false){
 				return handleError(res, 400, emailCheck.error + ": " + emailCheck.message);
 			}
-			// console.log("reached");
 			const surveyor = await surveyorLoginModel.create({
 				email,
 				password,
@@ -229,9 +234,9 @@ module.exports.surveyorLogin = async (req, res) => {
 module.exports.logout = async (req, res) => {
 	try {
 		const authToken = req.headers["authorization"].split(" ")[1];
-		const userType = req.body;
+		const role = req.body;
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);
-		if (userType === "resident") {
+		if (role === "resident") {
 			await surveyorLoginModel.findOneAndUpdate(
 				{
 					accessToken: authToken,
