@@ -13,6 +13,7 @@ const { roleCheck } = require("../utils/roleCheck");
 
 const maxAgeAccessToken = 24 * 60 * 60;
 const maxAgeRefreshToken = 7 * 24 * 60 * 60;
+// const maxAgeRefreshToken = 10;
 
 const createToken = (id, age, tokenSecret) => {
 	return jwt.sign( id, tokenSecret, {
@@ -66,6 +67,7 @@ module.exports.surveyorSignup = async (req, res) => {
 	
 	try {
 		const auth = req.headers["authorization"].split(" ")[1];
+		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
 		const admin = await surveyorLoginModel.findOne({accessToken: auth})
 		if(! await roleCheck(res, admin, 'surveyor_signup'))	return res.send('Access Denied')
 
@@ -108,7 +110,7 @@ module.exports.surveyorSignup = async (req, res) => {
 	}
 };
 
-module.exports.getUserDetailFromToken = async (req, res) => {
+module.exports.getDetailsFromToken = async (req, res) => {
 	
 	try {
 		const authToken = req.headers["authorization"].split(" ")[1];
@@ -117,17 +119,18 @@ module.exports.getUserDetailFromToken = async (req, res) => {
 		if ((!authToken && !refreshToken) || !refreshToken) {
 			return handleError(res, 401, "Access Denied. Login in again");
 		}
+
 		verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET, true);
 		const accessTokenVerification = verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, false);
 		if (accessTokenVerification) {
 			if (accessTokenVerification === true) {
-				const user = await loginModel.findOne({
+				const user = await surveyorLoginModel.findOne({
 					accessToken: authToken,
 				});
 				if (!user) {
 					return handleError(res, 404, "No user found with this token");
 				}
-				res.send(userView(user));
+				res.send(surveyorView(user));
 				console.log("Login authenticated using access token");
 			}
 		} else {
@@ -138,7 +141,7 @@ module.exports.getUserDetailFromToken = async (req, res) => {
 				res.send("User Logged Out");
 			} else {
 				const accessToken = createToken({id: user._id, isAdmin: user.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
-				const updatedUser = await loginModel.findOneAndUpdate(
+				const updatedUser = await surveyorLoginModel.findOneAndUpdate(
 					{
 						refreshToken: refreshToken,
 					},
@@ -148,7 +151,7 @@ module.exports.getUserDetailFromToken = async (req, res) => {
 					{ new: true }
 				);
 				console.log("Login Authenticated and created accesstoken is: ", accessToken);
-				res.status(200).send(userView(updatedUser));
+				res.status(200).send(surveyorView(updatedUser));
 			}
 		}
 	} catch (error) {
@@ -208,7 +211,6 @@ module.exports.surveyorLogin = async (req, res) => {
 			return handleError(res, 401, "Credentials don't match.");
 		}
 		console.log("Authentication successful");
-		console.log(surveyorAuth.isAdmin);
 		const authToken = createToken({id:surveyorAuth._id, isAdmin: surveyorAuth.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
 		const refreshToken = createToken({id:surveyorAuth._id, isAdmin: surveyorAuth.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);
 		try {

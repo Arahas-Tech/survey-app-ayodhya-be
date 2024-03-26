@@ -17,15 +17,9 @@ module.exports.touristFeedback = async (req, res) => {
 		}
 		await touristFeedbackModel.create({
 			surveyorEmail: surveyor.email,
-			touristName: fields.name,
-			touristCity: fields.city,
-			touristPhone: fields.phone,
-			cleanliness: fields.cleanliness,
-			accessToTp: fields.accessToTp,
-			costEffectiveTp: fields.costEffectiveTp,
-			stay: fields.stay,
-			hygiene: fields.hygiene,
-			disabilityFriendly: fields.disabilityFriendly,
+            latitude: surveyor.latitude,
+            longitude: surveyor.longitude,
+            region: surveyor.region,
 		});
 		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { touristSurveys: 1 } });
 		res.send("Survey Completed");

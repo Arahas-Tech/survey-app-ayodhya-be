@@ -152,10 +152,12 @@ const surveyorLogin = new mongoose.Schema(
 		},
 		gisSurveys: {
 			type: Number,
+			required: true,
 			default: 0,
 		},
 		touristSurveys: {
 			type: Number,
+			required: true,
 			default: 0,
 		},
 		accessToken: {

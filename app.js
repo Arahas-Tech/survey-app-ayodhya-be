@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoutes");
 const touristFeedbackRouter = require("./routes/outsideFeedbackRoutes");
 const residentFeedbackRouter = require("./routes/residentRouters/residentFeedbackRouters");
+const adminRouter = require("./routes/adminRoutes");
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.use((_, res, next) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api/touristFeedback", touristFeedbackRouter);
 app.use("/api/residents", residentFeedbackRouter);
 
