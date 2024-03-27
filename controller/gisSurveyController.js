@@ -2,12 +2,12 @@ const touristFeedbackModel = require("../models/touristFeedback");
 const { surveyorLoginModel } = require("../models/loginModel");
 const handleError = require("../utils/handleError");
 const verifyToken = require("../utils/verifyToken");
+const gisModel = require("../models/gisModel");
 
-module.exports.touristFeedback = async (req, res) => {
+module.exports.gisSurvey = async (req, res) => {
 	try {
 		const authToken = req.headers["authorization"].split(" ")[1];
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);
-		if (!(await roleCheck(res, adminAuth, "surveyo_tourist"))) return res.send("Access Denied");
 		const fields = req.body;
 		const surveyor = await surveyorLoginModel.findOne({
 			accessToken: authToken,
@@ -15,11 +15,15 @@ module.exports.touristFeedback = async (req, res) => {
 		if (!surveyor) {
 			return handleError(res, 401, "Access Denied");
 		}
-		await touristFeedbackModel.create({
+		if (!(await roleCheck(res, surveyor, "surveyo_tourist"))) return res.send("Access Denied");
+		await gisModel.create({
 			surveyorEmail: surveyor.email,
-            latitude: fields.latitude,
-            longitude: fields.longitude,
-            region: fields.region,
+			image: fields.image,
+			location: {
+				type: "Point",
+				coordinates: [fields.longitude, fields.latitude],
+			},
+			region: fields.region,
 		});
 		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { gisSurveys: 1 } });
 		res.send("Survey Completed");

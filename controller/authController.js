@@ -71,7 +71,7 @@ module.exports.surveyorSignup = async (req, res) => {
 		const admin = await surveyorLoginModel.findOne({accessToken: auth})
 		if(! await roleCheck(res, admin, 'surveyor_signup'))	return res.send('Access Denied')  // checking role and privileges
 
-		const { email, password, phone, name } = req.body;
+		const { email, password, phone, name, role } = req.body;
 		const surveyor = await surveyorLoginModel.findOne({
 			$or: [{ email: email }, { phone: phone }],
 		});
@@ -91,6 +91,7 @@ module.exports.surveyorSignup = async (req, res) => {
 				password,
 				phone,
 				name,
+				role,
 			});
 			const accessToken = createToken({id: surveyor._id, isAdmin: surveyor.isAdmin}, maxAgeAccessToken, process.env.ACCESS_TOKEN_SECRET);
 			const refreshToken = createToken({id: surveyor._id, isAdmin: surveyor.isAdmin}, maxAgeRefreshToken, process.env.REFRESH_TOKEN_SECRET);

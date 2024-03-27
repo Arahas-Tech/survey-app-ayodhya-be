@@ -1,8 +1,9 @@
 const express = require('express')
 const {touristFeedback} = require('../controller/touristFeedbackController') 
 
-const feedbackRouter = express.Router()
+const survey = express.Router()
 
-feedbackRouter.post("/touristFeedback", touristFeedback);
+survey.post("/touristFeedback", touristFeedback);
+survey.post("/gisSurvey", touristFeedback);
 
-module.exports = feedbackRouter;
+module.exports = survey;
