@@ -17,11 +17,11 @@ module.exports.touristFeedback = async (req, res) => {
 		}
 		await touristFeedbackModel.create({
 			surveyorEmail: surveyor.email,
-            latitude: surveyor.latitude,
-            longitude: surveyor.longitude,
-            region: surveyor.region,
+            latitude: fields.latitude,
+            longitude: fields.longitude,
+            region: fields.region,
 		});
-		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { touristSurveys: 1 } });
+		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { gisSurveys: 1 } });
 		res.send("Survey Completed");
 	} catch (error) {
 		return handleError(res, 400, error);

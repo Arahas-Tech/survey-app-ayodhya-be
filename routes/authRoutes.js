@@ -12,9 +12,4 @@ authRouter.post('/login', login);
 authRouter.post('/surveyorLogin', surveyorLogin);
 authRouter.get('/logout', logout);
 
-// authRouter.get('/overview', surveyOverview);
-// authRouter.get('/surveyors', surveyors);
-// authRouter.post('/update_surveyor', updateSurveyor);
-
-
 module.exports = authRouter;

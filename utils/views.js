@@ -1,9 +1,9 @@
 module.exports.tokens = (data) => {
 	const tokenData = {
-		// isAdmin: data.isAdmin,
-		role: data.role,
-		gisSurveys: data.gisSurveys,
-		touristSurveys: data.touristSurveys,
+		isAdmin: data.isAdmin,
+		// role: data.role,
+		// gisSurveys: data.gisSurveys,
+		// touristSurveys: data.touristSurveys,
 		accessToken: data.accessToken,
 		refreshToken: data.refreshToken,
 		// temp: data.accessToken + " " + data.refreshToken,
@@ -24,7 +24,7 @@ module.exports.surveyorView = (surveyor) => {
 		name: surveyor.name,
 		email: surveyor.email,
 		phone: surveyor.phone,
-		// role: surveyor.role,
+		role: surveyor.role,
 		gisSurveys: surveyor.gisSurveys,
 		touristSurveys: surveyor.touristSurveys,
 	};
