@@ -15,7 +15,7 @@ module.exports.gisSurvey = async (req, res) => {
 		if (!surveyor) {
 			return handleError(res, 401, "Access Denied");
 		}
-		if (!(await roleCheck(res, surveyor, "surveyo_tourist"))) return res.send("Access Denied");
+		if (!(await roleCheck(res, surveyor, "survey_gis"))) return res.send("Access Denied");
 		await gisModel.create({
 			surveyorEmail: surveyor.email,
 			image: fields.image,
