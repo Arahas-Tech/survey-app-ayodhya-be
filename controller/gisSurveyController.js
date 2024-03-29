@@ -3,6 +3,7 @@ const { surveyorLoginModel } = require("../models/loginModel");
 const handleError = require("../utils/handleError");
 const verifyToken = require("../utils/verifyToken");
 const gisModel = require("../models/gisModel");
+const { roleCheck } = require("../utils/roleCheck");
 
 module.exports.gisSurvey = async (req, res) => {
 	try {

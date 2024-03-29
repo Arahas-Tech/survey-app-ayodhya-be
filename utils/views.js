@@ -6,7 +6,7 @@ module.exports.tokens = (data) => {
 		// touristSurveys: data.touristSurveys,
 		accessToken: data.accessToken,
 		refreshToken: data.refreshToken,
-		// temp: data.accessToken + " " + data.refreshToken,
+		temp: data.accessToken + " " + data.refreshToken,
 	}
 	return tokenData;
 }
