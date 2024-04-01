@@ -1,7 +1,5 @@
 const express = require('express')
 const {signup, login, logout, getDetailsFromToken, surveyorSignup, surveyorLogin} = require('../controller/authController');
-const { surveyOverview, updateSurveyor } = require('../controller/dataDisplayController');
-const { surveyors } = require('../controller/dataDisplayController');
 
 const authRouter = express.Router()
 

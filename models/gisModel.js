@@ -26,10 +26,24 @@ const gisSurveySchema = new mongoose.Schema({
 		type: locationSchema,
 		required: true,
 	},
-	region: {
+	mohalla: {
 		type: String,
 		required: true,
 	},
+	city: {
+		type: String,
+		required: true,
+	},
+	state: {
+		type: String,
+		required: true,
+	},
+	pincode: {
+		type: Number,
+		required: true,
+	},
+},{
+	versionKey: false
 });
 
 const gisModel = new mongoose.model("gisSurvey", gisSurveySchema);
