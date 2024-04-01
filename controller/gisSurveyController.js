@@ -24,7 +24,10 @@ module.exports.gisSurvey = async (req, res) => {
 				type: "Point",
 				coordinates: [fields.longitude, fields.latitude],
 			},
-			region: fields.region,
+			mohalla: fields.mohalla,
+			state: fields.state,
+			pincode: fields.pincode,
+			city: fields.city,
 		});
 		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { gisSurveys: 1 } });
 		res.send("Survey Completed");
