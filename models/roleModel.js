@@ -1,13 +1,20 @@
 const mongoose = require("mongoose");
 
-const rolesSchema = new mongoose.Schema({
+const temp = {
 	name: {
 		type: String,
-		// required: true,
 	},
 	privileges: {
 		type: [String],
-		// required: true,
+	},
+}
+
+const rolesSchema = new mongoose.Schema({
+	name: {
+		type: String,
+	},
+	privileges: {
+		type: [String],
 	},
 });
 

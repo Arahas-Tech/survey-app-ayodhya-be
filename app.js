@@ -36,7 +36,6 @@ app.use((_, res, next) => {
 app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/surveyor", touristFeedbackRouter);
-app.use("/api/surveyor", gisSurvey);
 app.use("/api/residents", residentFeedbackRouter);
 
 app.listen(PORT, () => {

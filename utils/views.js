@@ -7,6 +7,7 @@ module.exports.tokens = (data) => {
 		accessToken: data.accessToken,
 		refreshToken: data.refreshToken,
 		temp: data.accessToken + " " + data.refreshToken,
+		role: data.role,
 	}
 	return tokenData;
 }

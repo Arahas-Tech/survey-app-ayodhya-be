@@ -4,6 +4,7 @@ const handleError = require("../utils/handleError");
 const verifyToken = require("../utils/verifyToken");
 const gisModel = require("../models/gisModel");
 const { roleCheck } = require("../utils/roleCheck");
+const createFormModel = require("../models/createFormModel");
 
 module.exports.gisSurvey = async (req, res) => {
 	try {
@@ -20,10 +21,8 @@ module.exports.gisSurvey = async (req, res) => {
 		await gisModel.create({
 			surveyorEmail: surveyor.email,
 			image: fields.image,
-			location: {
-				type: "Point",
-				coordinates: [fields.longitude, fields.latitude],
-			},
+			latitude: fields.latitude,
+			longitude: fields.longitude,
 			mohalla: fields.mohalla,
 			state: fields.state,
 			pincode: fields.pincode,
@@ -35,3 +34,19 @@ module.exports.gisSurvey = async (req, res) => {
 		return handleError(res, 400, error);
 	}
 };
+
+
+// module.exports.formFeedback = async (req,res) => {
+// 	try {
+// 		const data = req.body;
+// 		const model = await createFormModel('testForm1');
+// 		console.log(data);
+
+// 		await model.create(
+// 			data
+// 		)
+// 		res.send('Survey Completed')
+// 	} catch (error) {
+// 		return handleError(res, 400, error)
+// 	}
+// }

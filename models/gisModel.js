@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 
 
-const locationSchema = new mongoose.Schema({
-	type: {
-		type: String,
-		enum: ["Point"],
-		required: true,
-	},
-	coordinates: {
-		type: [Number],
-		required: true,
-	},
-});
+// const locationSchema = new mongoose.Schema({
+// 	type: {
+// 		type: String,
+// 		enum: ["Point"],
+// 		required: true,
+// 	},
+// 	coordinates: {
+// 		type: [Number],
+// 		required: true,
+// 	},
+// });
 
 const gisSurveySchema = new mongoose.Schema({
 	surveyorEmail: {
@@ -22,8 +22,16 @@ const gisSurveySchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	location: {
-		type: locationSchema,
+	// location: {
+	// 	type: locationSchema,
+	// 	required: true,
+	// },
+	latitude: {
+		type: String,
+		required: true,
+	},
+	longitude: {
+		type: String,
 		required: true,
 	},
 	mohalla: {
