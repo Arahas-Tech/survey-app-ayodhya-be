@@ -86,17 +86,18 @@ module.exports.updateSurveyor = async (req, res) => {
 
 module.exports.createForm = async (req, res) => {
 	try {
-		const auth = req.headers["authorization"].split(" ")[1];
-		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
-		const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
-		if (!(await roleCheck(res, adminAuth, "create_form"))) return res.send("Access Denied");
+		// const auth = req.headers["authorization"].split(" ")[1];
+		// verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
+		// const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
+		// if (!(await roleCheck(res, adminAuth, "create_form"))) return res.send("Access Denied");
 
-		const form = {
-			formName: req.body.formName,
-			city: req.body.city,
-			subject: req.body.subject,
-			formFields: req.body.formFields
-		}
+		// const form = {
+		// 	formName: req.body.formName,
+		// 	city: req.body.city,
+		// 	subject: req.body.subject,
+		// 	formFields: req.body.formFields
+		// }
+		const form = req.body;
 		await formModel.create(
 			form
 		)
@@ -127,5 +128,21 @@ module.exports.updateForm = async (req, res) => {
 		res.send('Form updated')
 	} catch (error) {
 		handleError(res, 400, 'Error - ' + error)
+	}
+}
+
+module.exports.getForm = async (req,res) => {
+	try {
+		// const auth = req.headers["authorization"].split(" ")[1];
+		// verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
+		// const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
+		// if (!(await roleCheck(res, adminAuth, "update_form"))) return res.send("Access Denied");
+
+		const name = 'Tourist Survey';
+		const form = await formModel.findOne({formName: name})
+
+		res.send(form)
+	} catch (error) {
+		handleError(res, 400, 'Error - ' + error);
 	}
 }

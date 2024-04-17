@@ -36,13 +36,25 @@ const form = new mongoose.Schema(
 			required: true,
 			unique:	true
 		},
-		city: {
-			type: String,
-			required: true,
-		},
+		// city: {
+		// 	type: String,
+		// 	required: true,
+		// },
 		subject: {
 			type: String,
 			required: true,
+		},
+		touristName: {
+			type: String,
+			required: true
+		},
+		touristContact: {
+			type: String,
+			required: true
+		},
+		touristCity: {
+			type: String,
+			required: true
 		},
 		formFields: [fieldschema],
 	},

@@ -51,11 +51,23 @@ const createFormModel = async (formName) => {
 					type: String,
 					required: true,
 				},
-				city: {
+				// touristCity: {
+				// 	type: String,
+				// 	required: true,
+				// },
+				subject: {
 					type: String,
 					required: true,
 				},
-				subject: {
+				touristName: {
+					type: String,
+					required: true,
+				},
+				touristContact: {
+					type: String,
+					required: true,
+				},
+				touristCity: {
 					type: String,
 					required: true,
 				},
