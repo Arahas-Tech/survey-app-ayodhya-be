@@ -133,10 +133,10 @@ module.exports.updateForm = async (req, res) => {
 
 module.exports.getForm = async (req,res) => {
 	try {
-		// const auth = req.headers["authorization"].split(" ")[1];
-		// verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
-		// const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
-		// if (!(await roleCheck(res, adminAuth, "update_form"))) return res.send("Access Denied");
+		const auth = req.headers["authorization"].split(" ")[1];
+		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
+		const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
+		if (!(await roleCheck(res, adminAuth, "update_form"))) return res.send("Access Denied");
 
 		const name = 'Tourist Survey';
 		const form = await formModel.findOne({formName: name})
