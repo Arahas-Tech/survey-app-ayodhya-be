@@ -18,16 +18,21 @@ module.exports.surveyOverview = async (req, res) => {
 
 		const model = await createFormModel('Tourist Survey');
 
+		const questions = await formModel.findOne({
+			formName: 'Tourist Survey'
+		});
+		const fields = questions.formFields.map((field) => {
+			return { fieldName: field.fieldName, avg: { $avg: `$${field.fieldName}` } };
+		});
+
+		console.log(fields);
+
 		const ans = await model.aggregate([
 			{
 				$group: {
 					_id: null,
-					cleanliness: { $avg: "$cleanliness" },
-					accessToTp: { $avg: "$accessToTp" },
-					costEffectiveTp: { $avg: "$costEffectiveTp" },
-					stay: { $avg: "$stay" },
-					hygiene: { $avg: "$hygiene" },
-					disabilityFriendly: { $avg: "$disabilityFriendly" },
+					// stay: { $avg: "$stay" },
+					...fields.reduce((acc, field) => ({ ...acc, [field.fieldName]: field.avg }), {})
 				},
 			},
 		]);
