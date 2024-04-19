@@ -23,6 +23,7 @@ const createToken = (id, age, tokenSecret) => {
 
 module.exports.signup = async (req, res) => {
 	try {
+		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const { email, password, phone, name } = req.body;
 		const user = await loginModel.findOne({
 			$or: [{ email: email }, { phone: phone }],
@@ -66,6 +67,7 @@ module.exports.signup = async (req, res) => {
 module.exports.surveyorSignup = async (req, res) => {
 	
 	try {
+		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const auth = req.headers["authorization"].split(" ")[1];
 		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
 		const admin = await surveyorLoginModel.findOne({accessToken: auth})
@@ -114,6 +116,7 @@ module.exports.surveyorSignup = async (req, res) => {
 module.exports.getDetailsFromToken = async (req, res) => {
 	
 	try {
+		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const authToken = req.headers["authorization"].split(" ")[1];
 		const refreshToken = req.headers["authorization"].split(" ")[2];
 	
@@ -162,6 +165,7 @@ module.exports.getDetailsFromToken = async (req, res) => {
 
 module.exports.login = async (req, res) => {
 	try {
+		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const user = req.body;
 		const userAuth = await loginModel.findOne({
 			$or: [{ email: user.phoneNumberOrEmail }, { phone: user.phoneNumberOrEmail }],
@@ -199,6 +203,7 @@ module.exports.login = async (req, res) => {
 
 module.exports.surveyorLogin = async (req, res) => {
 	try {
+		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const surveyor = req.body;
 		const surveyorAuth = await surveyorLoginModel.findOne({
 			$or: [{ email: surveyor.phoneNumberOrEmail }, { phone: surveyor.phoneNumberOrEmail }],
@@ -236,6 +241,7 @@ module.exports.surveyorLogin = async (req, res) => {
 
 module.exports.logout = async (req, res) => {
 	try {
+		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const authToken = req.headers["authorization"].split(" ")[1];
 		const role = req.body;
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);

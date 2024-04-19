@@ -8,6 +8,7 @@ const createFormModel = require("../models/createFormModel");
 
 module.exports.gisSurvey = async (req, res) => {
 	try {
+		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const authToken = req.headers["authorization"].split(" ")[1];
 		verifyToken(authToken, process.env.ACCESS_TOKEN_SECRET, true);
 		const fields = req.body;
