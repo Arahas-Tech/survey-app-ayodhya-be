@@ -165,7 +165,6 @@ module.exports.getDetailsFromToken = async (req, res) => {
 
 module.exports.login = async (req, res) => {
 	try {
-		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const user = req.body;
 		const userAuth = await loginModel.findOne({
 			$or: [{ email: user.phoneNumberOrEmail }, { phone: user.phoneNumberOrEmail }],
