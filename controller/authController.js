@@ -65,7 +65,6 @@ module.exports.signup = async (req, res) => {
 };
 
 module.exports.surveyorSignup = async (req, res) => {
-	
 	try {
 		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const auth = req.headers["authorization"].split(" ")[1];
@@ -202,7 +201,6 @@ module.exports.login = async (req, res) => {
 
 module.exports.surveyorLogin = async (req, res) => {
 	try {
-		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
 		const surveyor = req.body;
 		const surveyorAuth = await surveyorLoginModel.findOne({
 			$or: [{ email: surveyor.phoneNumberOrEmail }, { phone: surveyor.phoneNumberOrEmail }],
