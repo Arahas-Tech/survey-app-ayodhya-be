@@ -125,15 +125,15 @@ module.exports.updateForm = async (req, res) => {
 		const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
 		if (!(await roleCheck(res, adminAuth, 'update_form'))) return res.send('Access Denied');
 
+		const name = req.body.formName;
 		const fields = req.body.formFields;
-		const name = res.body.formName;
 
 		const updatedForm = await formModel.findOneAndUpdate(
 			{
 				formName: name,
 			},
 			{
-				$set: { formFields: fields.formFields },
+				$set: { formFields: fields },
 			}
 		);
 
