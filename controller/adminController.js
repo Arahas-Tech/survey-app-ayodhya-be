@@ -119,14 +119,14 @@ module.exports.createForm = async (req, res) => {
 
 module.exports.updateForm = async (req, res) => {
 	try {
-		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
-		const auth = req.headers["authorization"].split(" ")[1];
+		if (!req.headers['authorization']) return handleError(res, 401, 'Error: No token found. Please login.');
+		const auth = req.headers['authorization'].split(' ')[1];
 		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
 		const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
-		if (!(await roleCheck(res, adminAuth, "update_form"))) return res.send("Access Denied");
+		if (!(await roleCheck(res, adminAuth, 'update_form'))) return res.send('Access Denied');
 
-		const fields = req.body;
-		const name = "Tourist Survey";
+		const fields = req.body.formFields;
+		const name = res.body.formName;
 
 		const updatedForm = await formModel.findOneAndUpdate(
 			{
@@ -137,26 +137,26 @@ module.exports.updateForm = async (req, res) => {
 			}
 		);
 
-		if (!updatedForm) return handleError(res, 404, "Error: 404 not found");
-		res.send("Form updated");
+		if (!updatedForm) return handleError(res, 404, 'Error: 404 not found');
+		res.send('Form updated');
 	} catch (error) {
-		handleError(res, 400, "Error - " + error);
+		handleError(res, 400, 'Error - ' + error);
 	}
 };
 
 module.exports.getForm = async (req, res) => {
 	try {
-		if (!req.headers["authorization"]) return handleError(res, 401, "Error: No token found. Please login.");
-		const auth = req.headers["authorization"].split(" ")[1];
+		if (!req.headers['authorization']) return handleError(res, 401, 'Error: No token found. Please login.');
+		const auth = req.headers['authorization'].split(' ')[1];
 		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
 		const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
-		if (!(await roleCheck(res, adminAuth, "update_form"))) return res.send("Access Denied");
+		if (!(await roleCheck(res, adminAuth, 'update_form'))) return res.send('Access Denied');
 
-		const name = "Tourist Survey";
+		const name = req.body.formName;
 		const form = await formModel.findOne({ formName: name });
 
 		res.send(form);
 	} catch (error) {
-		handleError(res, 400, "Error - " + error);
+		handleError(res, 400, 'Error - ' + error);
 	}
 };

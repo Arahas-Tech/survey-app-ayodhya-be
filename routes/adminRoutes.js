@@ -9,7 +9,7 @@ adminRouter.get('/surveyors', surveyors);
 adminRouter.post('/update_surveyor', updateSurveyor);
 adminRouter.post('/create_form', createForm);
 adminRouter.post('/update_form', updateForm);
-adminRouter.get('/get_form', getForm);
+adminRouter.post('/get_form', getForm);
 
 
 module.exports = adminRouter;
