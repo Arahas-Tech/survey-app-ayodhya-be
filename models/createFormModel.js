@@ -40,6 +40,7 @@ const fieldMapping = (fields) => {
 
 const createFormModel = async (formName) => {
 	try {
+		if (mongoose.models['Tourist Survey'])	return mongoose.models['Tourist Survey']
 		const form = await formModel.findOne({
 			formName,
 		});
@@ -81,7 +82,7 @@ const createFormModel = async (formName) => {
 		const model = new mongoose.model(formName, schema);
 		return model;
 	} catch (error) {
-		return handleError(res, 400, error);
+		console.log(error);
 	}
 };
 

@@ -4,6 +4,7 @@ const handleError = require("../utils/handleError");
 const verifyToken = require("../utils/verifyToken");
 const { roleCheck } = require("../utils/roleCheck");
 const createFormModel = require("../models/createFormModel");
+const { default: mongoose } = require("mongoose");
 
 
 const addEmail = (data, email) => {
@@ -22,7 +23,7 @@ module.exports.touristFeedback = async (req, res) => {
 			return handleError(res, 401, "Access Denied");
 		}
 		if (!(await roleCheck(res, surveyor, "survey_tourist"))) return res.send("Access Denied");
-		
+
 		const data = addEmail(req.body, surveyor.email);
 		// await touristFeedbackModel.create({
 		// 	surveyorEmail: surveyor.email,
@@ -37,8 +38,9 @@ module.exports.touristFeedback = async (req, res) => {
 		// 	disabilityFriendly: fields.disabilityFriendly,
 		// });
 		
+		console.log(Object.keys(mongoose.models));
 		const model = await createFormModel('Tourist Survey')
-		await model.create(
+		const temp = await model.create(
 			data
 		);
 		await surveyorLoginModel.findOneAndUpdate({ _id: surveyor._id }, { $inc: { touristSurveys: 1 } });
