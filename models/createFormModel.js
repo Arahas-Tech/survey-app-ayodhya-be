@@ -46,6 +46,8 @@ const createFormModel = async (formName) => {
 			formName,
 		});
 
+		if(!form) return 'Form not found'
+
 		const schemaFields = fieldMapping(form.formFields);
 		const schema = new mongoose.Schema(
 			{

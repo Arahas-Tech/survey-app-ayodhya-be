@@ -38,7 +38,7 @@ module.exports.touristFeedback = async (req, res) => {
 		// 	disabilityFriendly: fields.disabilityFriendly,
 		// });
 		
-		console.log(Object.keys(mongoose.models));
+		// console.log(Object.keys(mongoose.models));
 		const model = await createFormModel('Tourist Survey')
 		const temp = await model.create(
 			data

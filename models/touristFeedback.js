@@ -62,6 +62,6 @@ const touristFeedback = new mongoose.Schema(
 	}
 );
 
-const feedbackModel = new mongoose.model("touristFeedback", touristFeedback);
+// const feedbackModel = new mongoose.model("touristFeedback", touristFeedback);
 
-module.exports = feedbackModel;
+// module.exports = feedbackModel;
