@@ -56,10 +56,10 @@ const createFormModel = async (formName) => {
 				// 	type: String,
 				// 	required: true,
 				// },
-				subject: {
-					type: String,
-					required: true,
-				},
+				// subject: {
+				// 	type: String,
+				// 	required: true,
+				// },
 				touristName: {
 					type: String,
 					required: true,
