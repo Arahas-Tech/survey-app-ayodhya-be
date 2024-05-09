@@ -149,8 +149,8 @@ module.exports.getForm = async (req, res) => {
 		if (!req.headers['authorization']) return handleError(res, 401, 'Error: No token found. Please login.');
 		const auth = req.headers['authorization'].split(' ')[1];
 		verifyToken(auth, process.env.ACCESS_TOKEN_SECRET, true);
-		const adminAuth = await surveyorLoginModel.findOne({ accessToken: auth });
-		if (!(await roleCheck(res, adminAuth, 'update_form'))) return res.send('Access Denied');
+		const formAuth = await surveyorLoginModel.findOne({ accessToken: auth });
+		if (!(await roleCheck(res, formAuth, 'get_form'))) return res.send('Access Denied');
 
 		const name = req.body.formName;
 		const form = await formModel.findOne({ formName: name });
